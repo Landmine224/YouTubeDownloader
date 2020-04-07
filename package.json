@@ -1,0 +1,16 @@
+{
+  "name": "youtubedownloader-master",
+  "version": "1.0.0",
+  "description": "This is a repository that has sample code for my [Medium Article](https://blog.usejournal.com/how-i-made-my-own-youtube-downloader-using-javascript-and-node-js-160b172f6e10)",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "ytdl-core": "^2.0.1"
+  }
+}
