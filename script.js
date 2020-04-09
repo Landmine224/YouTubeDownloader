@@ -8,31 +8,31 @@ var type;
 
 mp3Btn.addEventListener('click', () => {
 	type = "mp3";
-	download(URLinput.value, type, "asdf");
+	download(URLinput.value, type);
 });
 
 
 mp4Btn.addEventListener('click', () => {
 	type="mp4";
-	download(URLinput.value, type, "asdf");
+	download(URLinput.value, type);
 });
 
 async function download(query, format, title) {
 	if(query.includes("watch")){
-		var index = URLinput.value.indexOf("watch?v=")+8;
-		var vidId = URLinput.value.slice(index, URLinput.length);
-		title =  await vidSnippet(vidId);
-		window.location.href = `${server}/download?url=${query}&vid_name=${title}&type=${type}`;
-		
-	} else {
-	if(startPoint.value == ""){
-			startPoint.value = 1;
-		} 
-		console.log(startPoint.value);
-		if(endPoint.value == ""){
-			endPoint.value = 1;
+		if(title == "" || title == undefined){
+			var index = query.indexOf("watch?v=")+8;
+			var vidId = query.slice(index, URLinput.length);
+			title =  await getTitle(vidId);
 		}
-		console.log(endPoint.value);
+		window.location.href = `${server}/download?url=${query}&vid_name=${title}&type=${type}`;
+		URLinput.value = "";
+	} else {
+	if(startPoint.value == "" && endPoint.value == ""){
+			startPoint.value = 1;
+			endPoint.value = 1;
+		} else if(startPoint.value == ""){
+			startPoint.value = 1;
+		}
 		getPlaylist(query);
 	}
 }
@@ -49,22 +49,24 @@ async function download(query, format, title) {
 	 "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId="+playlistId+"&key=AIzaSyBoZxIlEUuC5L_X6MzkvyXsx71EL-lRkIs");
 	 const playlist = await response.json();
 	 playlist_length = playlist.items.length;
-	 console.log(playlist);
 	 if(endPoint.value > playlist_length){
 		 endPoint.value = playlist_length
+	 } else if(endPoint.value == ""){
+		endPoint.value = startPoint.value;
 	 }
+	 console.log(playlist);
 	 for(var i = startPoint.value-1; i < endPoint.value; i++){
 		 var vidId = playlist.items[i].snippet.resourceId.videoId;
-		 var title = vidSnippet(vidId);
-		 
-		 sleep(2500);
+		 var title = await getTitle(vidId);
+		 sleep(3000);
+		 console.log("downloading");
 		 download("https://www.youtube.com/watch?v="+vidId, type, title);
-		 
+		 sleep(2500);
 	 }
 	 
  }
  
- async function vidSnippet(vidId){
+ async function getTitle(vidId){
 	 const response = await fetch("https://www.googleapis.com/youtube/v3/videos?part=snippet&id="+vidId+"&key=AIzaSyBoZxIlEUuC5L_X6MzkvyXsx71EL-lRkIs")
 	 const vid_json = await response.json();
 	 var title = vid_json.items[0].snippet.title;
