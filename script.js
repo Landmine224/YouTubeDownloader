@@ -17,6 +17,7 @@ mp4Btn.addEventListener('click', () => {
 	download(URLinput.value, type);
 });
 
+//send download request to server
 async function download(query, format, title) {
 	if(query.includes("watch")){
 		if(title == "" || title == undefined){
@@ -25,7 +26,6 @@ async function download(query, format, title) {
 			title =  await getTitle(vidId);
 		}
 		window.location.href = `${server}/download?url=${query}&vid_name=${title}&type=${type}`;
-		URLinput.value = "";
 	} else {
 	if(startPoint.value == "" && endPoint.value == ""){
 			startPoint.value = 1;
@@ -38,7 +38,6 @@ async function download(query, format, title) {
 }
 
  async function getPlaylist(url){
-	 var playlistId;
 	 var index = url.indexOf("list=");
 	 var playlistId = url.slice(index+5, url.length);
 	 
@@ -48,7 +47,7 @@ async function download(query, format, title) {
 	 const response = await fetch(
 	 "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId="+playlistId+"&key=AIzaSyBoZxIlEUuC5L_X6MzkvyXsx71EL-lRkIs");
 	 const playlist = await response.json();
-	 playlist_length = playlist.items.length;
+	 var playlist_length = playlist.items.length;
 	 if(endPoint.value > playlist_length){
 		 endPoint.value = playlist_length
 	 } else if(endPoint.value == ""){
