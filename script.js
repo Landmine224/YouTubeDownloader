@@ -5,6 +5,7 @@ var startPoint = document.querySelector('.start');
 var endPoint = document.querySelector('.end');
 var server = 'http://localhost:4000';
 var type;
+var apiKey = "AIzaSyAA3cFY3f0rzAo9raR1ViWlLxbrOL-CDqA";
 
 mp3Btn.addEventListener('click', () => {
 	type = "mp3";
@@ -41,11 +42,12 @@ async function download(query, format, title) {
 	 var index = url.indexOf("list=");
 	 var playlistId = url.slice(index+5, url.length);
 	 
+	 
 	 if(endPoint.value > 50){
 		 endPoint.value = 50;
 	 } 
 	 const response = await fetch(
-	 "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId="+playlistId+"&key=AIzaSyBoZxIlEUuC5L_X6MzkvyXsx71EL-lRkIs");
+	 "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId="+playlistId+"&key="+apiKey);
 	 const playlist = await response.json();
 	 var playlist_length = playlist.items.length;
 	 if(endPoint.value > playlist_length){
@@ -60,13 +62,13 @@ async function download(query, format, title) {
 		 sleep(3000);
 		 console.log("downloading");
 		 download("https://www.youtube.com/watch?v="+vidId, type, title);
-		 sleep(2500);
+		 sleep(3000);
 	 }
 	 
  }
  
  async function getTitle(vidId){
-	 const response = await fetch("https://www.googleapis.com/youtube/v3/videos?part=snippet&id="+vidId+"&key=AIzaSyBoZxIlEUuC5L_X6MzkvyXsx71EL-lRkIs")
+	 const response = await fetch("https://www.googleapis.com/youtube/v3/videos?part=snippet&id="+vidId+"&key="+apiKey)
 	 const vid_json = await response.json();
 	 var title = vid_json.items[0].snippet.title;
 	 return title;
