@@ -5,7 +5,7 @@ var startPoint = document.querySelector('.start');
 var endPoint = document.querySelector('.end');
 var server = 'http://localhost:4000';
 var type;
-var apiKey = "AIzaSyAA3cFY3f0rzAo9raR1ViWlLxbrOL-CDqA";
+var apiKey = "";
 
 mp3Btn.addEventListener('click', () => {
 	type = "mp3";
